@@ -5,6 +5,7 @@ class Game
       @score = 0
       @finished = false
       @pause = false
+      @high_score = load_high_score
     end
   
     def draw
@@ -20,6 +21,7 @@ class Game
       @score += 1
       @ball_x = rand(Window.width / SQUARE_SIZE)
       @ball_y = rand(Window.height / SQUARE_SIZE)
+      update_high_score(@score) # Add this line
     end
   
     def toggle_pause
@@ -38,17 +40,36 @@ class Game
       @finished
     end
   
+    def load_high_score
+        if File.exist?('high_score.txt')
+          File.read('high_score.txt').to_i
+        else
+          0
+        end
+      end
+    
+      def save_high_score
+        File.write('high_score.txt', @high_score)
+      end
+    
+      # Add a method to update the high score
+      def update_high_score(score)
+        if score > @high_score
+          @high_score = score
+          save_high_score
+        end
+      end    
 
     private
   
 
     def text_message
       if finished?
-        "Game over, Your Score was #{@score}. Press 'R' to restart. "
+        "Game over, Your Score was #{@score}. Highest Score: #{@high_score}\nPress 'R' to restart."
       elsif paused?
         "Paused. Press 'Space' to resume."
       else
-        "Score: #{@score}"
+        "Score: #{@score} - Highest Score: #{@high_score}"
       end
     end
 
