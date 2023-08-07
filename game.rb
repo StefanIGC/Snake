@@ -38,13 +38,19 @@ class Game
       @finished
     end
   
+
     private
   
+
     def text_message
       if finished?
         "Game over, Your Score was #{@score}. Press 'R' to restart. "
+      elsif paused?
+        "Paused. Press 'Space' to resume."
       else
         "Score: #{@score}"
       end
     end
+
+
   end
